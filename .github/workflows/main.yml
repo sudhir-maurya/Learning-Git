@@ -18,4 +18,10 @@ jobs:
 
       - name: Run a Simple Command
         run: echo "Hello, GitHub Runner!"
+      
+      - name: read env
+        env:
+          resource_id: "resource_id_1234"
+        run: |
+          echo ${resource_id}
 
