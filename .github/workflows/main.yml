@@ -23,5 +23,10 @@ jobs:
         env:
           resource_id: "resource_id_1234"
         run: |
-          echo ${resource_id}
+          if [-d services/${resource_dir} ]; then
+            echo "dir found"
+          else
+            echo "directory not found"
+            exit 1;
+          fi
 
