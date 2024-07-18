@@ -22,8 +22,9 @@ jobs:
       - name: read env
         env:
           resource_id: "resource_id_1234"
+          resource_dir: "gcp"
         run: |
-          if [-d services/${resource_dir} ]; then
+          if [ -d services/${resource_dir} ]; then
             echo "dir found"
           else
             echo "directory not found"
