@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       resource_dir:
-        description: "var 1"
+        description: "resource dir"
         required: true
         type: string
 
