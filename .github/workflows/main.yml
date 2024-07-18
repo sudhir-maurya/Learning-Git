@@ -22,7 +22,7 @@ jobs:
       - name: read env
         env:
           resource_id: "resource_id_1234"
-          resource_dir: ${{input.resource_dir}}
+          resource_dir: ${{ inputs.resource_dir }}
         run: |
           if [ -d services/${resource_dir} ]; then
             echo "dir found"
