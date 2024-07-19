@@ -1,0 +1,23 @@
+name: New Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      resource_dir:
+        description: "resource dir"
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Run a Simple Command
+        run: echo "New, GitHub Runner!"
+      
+
+
