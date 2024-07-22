@@ -118,8 +118,8 @@ jobs:
       - name: Terraform Plan Destroy
         if: (steps.parse-files.outputs.terragrunt_delete_dirs != '')
         run: |
-            echo targets triggering destroy plan: ${TERRAGRUNT_DIRS[@]}
-            make destroy-plan  
+            echo "Terragrunt destroy plan"
+
 
           
 
