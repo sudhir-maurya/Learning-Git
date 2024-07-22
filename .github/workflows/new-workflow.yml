@@ -22,6 +22,7 @@ on:
   #       required: true
   #       type: string
 
+
 defaults:
   run:
       shell: bash
@@ -135,6 +136,13 @@ jobs:
               echo "#### Running init on ${dir} ####"; \
             done; \
 
+      - name: Destroy resource
+        if: (steps.parse-files.outputs.terragrunt_delete_dirs != '')
+        env:
+          TERRAGRUNT_DIRS: ${{ steps.parse-files.outputs.terragrunt_delete_dirs }}
+        run: |
+          echo "Destroy resource"
+
 
           
-
+#comment 2
