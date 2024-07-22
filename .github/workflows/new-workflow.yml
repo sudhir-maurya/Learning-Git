@@ -16,6 +16,10 @@ on:
         required: true
         type: string
 
+ defaults:
+  run:
+      shell: bash
+
 jobs:
   build:
     if:  ${{ inputs.which_job == 'build' }}  
