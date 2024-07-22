@@ -7,17 +7,34 @@ on:
         description: "resource dir"
         required: true
         type: string
+      which_job:
+        description: which job
+        required: true
+        type: choice
+        default: build
+        options:
+          - build
+          - job2
 
 jobs:
   build:
+    if: ( ${{ inputs.which_job }} == "build" )
     runs-on: self-hosted
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
       - name: Run a Simple Command
         run: echo "New, workflow!"
-      
 
+  job2:
+    if: ( ${{ inputs.which_job }} == "build" )
+    runs-on: self-hosted
+    steps:
+      - name: Run a Simple Command
+        run: echo "Job2 ran"
+
+
+
+          
 
