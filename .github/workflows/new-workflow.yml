@@ -36,7 +36,7 @@ jobs:
 
       - name: Checkout Repository
         uses: actions/checkout@v2
-        
+
       - name: Get changed version files
         id: changed-files
         uses: tj-actions/changed-files@v42
@@ -118,8 +118,7 @@ jobs:
       - name: Terraform Plan Destroy
         if: (steps.parse-files.outputs.terragrunt_delete_dirs != '')
         run: |
-            echo targets triggering destroy plan: ${TERRAGRUNT_DIRS[@]}
-            make destroy-plan  
+            echo "Terragrunt destroy plan"
 
           
 
