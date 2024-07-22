@@ -119,6 +119,14 @@ jobs:
           get_top_dir changed_dirs "terragrunt_update_dirs"
           get_top_dir deleted_dirs "terragrunt_delete_dirs"
 
+
+      - name: Wait for approval
+        id: approval
+        uses: azure/wait-for-approval@v1
+        with:
+          poll-interval: 10
+          timeout-seconds: 600
+
       - name: Terraform Plan Destroy
         if: (steps.parse-files.outputs.terragrunt_delete_dirs != '')
         env:
