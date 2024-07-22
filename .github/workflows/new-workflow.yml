@@ -3,10 +3,6 @@ name: New Workflow
 on:
   workflow_dispatch:
     inputs:
-      resource_dir:
-        description: "resource dir"
-        required: true
-        type: string
       which_job:
         description: which job
         required: true
@@ -15,6 +11,10 @@ on:
         options:
           - build
           - job2
+      resource_dir:
+        description: "resource dir"
+        required: true
+        type: string
 
 jobs:
   build:
@@ -34,7 +34,92 @@ jobs:
       - name: Run a Simple Command
         run: echo "Job2 ran"
 
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        
+      - name: Get changed version files
+        id: changed-files
+        uses: tj-actions/changed-files@v42
+        with:
+          files: services/**
+          dir_names: true
+          dir_names_deleted_files_include_only_deleted_dirs: true
+  
+      - name: Parse files
+        id: parse-files
+        run: |
+          function get_top_dir() {
+            local -n initial_dirs=$1
+  
+            temp_parent_dirs=()
+            child_dirs=()
+            tbd_dirs=()
+  
+            # for each dir, check if it is a parent or child of another dir
+            for dir in ${initial_dirs[@]}; do
+              change=false
+              for second_dir in ${initial_dirs[@]}; do
+                if [[ $dir != $second_dir && $second_dir/ == $dir/* ]]; then
+                  temp_parent_dirs+=($dir)
+                  child_dirs+=($second_dir)
+                  change=true
+                fi
+              done
+              # if the file is not a parent, then we will keep it as TBD for now
+              if [[ $change == false ]]; then
+                tbd_dirs+=($dir)
+              fi
+            done
+  
+            parent_dirs=()
+            # parse parent dirs gain to remove dupes
+            for dir in ${temp_parent_dirs[@]}; do
+              found=false
+              for child in ${temp_parent_dirs[@]}; do
+                if [[ $dir != $child && $dir/ == $child/* ]]; then
+                  found=true
+                fi
+              done
+              if [[ $found == false ]]; then
+                parent_dirs+=($dir)
+              fi
+            done
+  
+            # change lists to sets
+            parent_dirs=($(echo "${parent_dirs[@]}" | tr ' ' '\n' | sort -u))
+            child_dirs=($(echo "${child_dirs[@]}" | tr ' ' '\n' | sort -u))
+            tbd_dirs=($(echo "${tbd_dirs[@]}" | tr ' ' '\n' | sort -u))
+  
+            # add parent dirs to the final list of directories to be updated
+            final_dirs=("${parent_dirs[@]}")
+  
+            # check if the TBD dirs are child dirs. If not, add them to the final list
+            for dir in ${tbd_dirs[@]}; do
+              if [[ ! " ${child_dirs[@]} " =~ " ${dir} " ]]; then
+                final_dirs+=($dir)
+              fi
+            done
+  
+            # remove duplicates
+            final_dirs=($(echo "${final_dirs[@]}" | tr ' ' '\n' | sort -u))
+            echo FINAL_DIRS ARE ${final_dirs[@]}
+            echo "::set-output name=$2::${final_dirs[*]}"
+          }
+  
+          # Get the list of changed files
+          changed_dirs=(${{ steps.changed-files.outputs.all_changed_files }})
+          echo "Changed dirs: ${changed_dirs[@]}"
+          deleted_dirs=(${{ steps.changed-files.outputs.deleted_files }})
+          echo "Deleted dirs : ${deleted_dirs[@]}"
+  
+          get_top_dir changed_dirs "terragrunt_update_dirs"
+          get_top_dir deleted_dirs "terragrunt_delete_dirs"
 
+      - name: Terraform Plan Destroy
+        if: (steps.parse-files.outputs.terragrunt_delete_dirs != '')
+        run: |
+            echo targets triggering destroy plan: ${TERRAGRUNT_DIRS[@]}
+            make destroy-plan  
 
           
 
