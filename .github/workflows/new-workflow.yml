@@ -127,6 +127,7 @@ jobs:
             echo "Terragrunt destroy plan"
             for dir in ${TERRAGRUNT_DIRS}; do \
               echo "#### Running init on $$dir ####"
+            done
 
 
           
