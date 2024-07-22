@@ -1,38 +1,27 @@
 name: New Workflow
 
 on:
-  workflow_dispatch:
-    inputs:
-      which_job:
-        description: which job
-        required: true
-        type: choice
-        default: build
-        options:
-          - build
-          - job2
-      resource_dir:
-        description: "resource dir"
-        required: true
-        type: string
+  pull_request:
+    branches:
+      - 'delete-*'
 
 defaults:
   run:
       shell: bash
 
 jobs:
-  build:
-    if:  ${{ inputs.which_job == 'build' }}  
-    runs-on: self-hosted
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+  # build:
+  #   if:  ${{ inputs.which_job == 'build' }}  
+  #   runs-on: self-hosted
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@v2
 
-      - name: Run a Simple Command
-        run: echo "New, workflow!"
+  #     - name: Run a Simple Command
+  #       run: echo "New, workflow!"
 
   job2:
-    if: ${{ inputs.which_job == 'job2' }}  
+    # if: ${{ inputs.which_job == 'job2' }}  
     runs-on: self-hosted
     steps:
       - name: Run a Simple Command
@@ -119,14 +108,6 @@ jobs:
           get_top_dir changed_dirs "terragrunt_update_dirs"
           get_top_dir deleted_dirs "terragrunt_delete_dirs"
 
-
-      - name: Wait for approval
-        id: approval
-        uses: azure/wait-for-approval@v1
-        with:
-          poll-interval: 10
-          timeout-seconds: 600
-
       - name: Terraform Plan Destroy
         if: (steps.parse-files.outputs.terragrunt_delete_dirs != '')
         env:
@@ -136,6 +117,13 @@ jobs:
             for dir in ${TERRAGRUNT_DIRS}; do \
               echo "#### Running init on ${dir} ####"; \
             done; \
+
+      - name: Destroy resource
+        if: (steps.parse-files.outputs.terragrunt_delete_dirs != '')
+        env:
+          TERRAGRUNT_DIRS: ${{ steps.parse-files.outputs.terragrunt_delete_dirs }}
+        run: |
+          echo "Destroy resource"
 
 
           
