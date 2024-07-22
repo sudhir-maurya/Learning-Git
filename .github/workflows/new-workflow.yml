@@ -18,7 +18,7 @@ on:
 
 jobs:
   build:
-    if:  ${{ github.event.inputs.which_job == 'build' }}  
+    if:  ${{ inputs.which_job == 'build' }}  
     runs-on: self-hosted
     steps:
       - name: Checkout Repository
@@ -28,7 +28,7 @@ jobs:
         run: echo "New, workflow!"
 
   job2:
-    if: ${{ github.event.inputs.which_job == 'job2' }}  
+    if: ${{ inputs.which_job == 'job2' }}  
     runs-on: self-hosted
     steps:
       - name: Run a Simple Command
