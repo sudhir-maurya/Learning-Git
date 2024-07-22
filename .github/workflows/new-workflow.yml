@@ -4,6 +4,21 @@ on:
   pull_request:
     branches:
       - 'delete-*'
+  # workflow_dispatch:
+  #   inputs:
+  #     which_job:
+  #       description: which job
+  #       required: true
+  #       type: choice
+  #       default: build
+  #       options:
+  #         - build
+  #         - job2
+  #     resource_dir:
+  #       description: "resource dir"
+  #       required: true
+  #       type: string
+
 
 defaults:
   run:
