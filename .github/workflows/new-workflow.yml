@@ -6,7 +6,7 @@ on:
       - main
   pull_request:
     branches:
-      - 'delete-*'
+      - 'delete_*'
   # workflow_dispatch:
   #   inputs:
   #     which_job:
