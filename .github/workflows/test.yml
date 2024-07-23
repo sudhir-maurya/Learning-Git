@@ -26,6 +26,8 @@ jobs:
     - name: Read variable
       run: |
         echo ${{ needs.my-job.outputs.output1 }}
+    outputs:
+      output1: ${{ needs.my-job.outputs.output1 }}
   my-third-job:
     name: third-job
     needs: my-second-job
@@ -33,4 +35,4 @@ jobs:
     steps:
     - name: Read from job1
       run: |
-        echo ${{ jobs.my-second-job.outputs.output1 }}
+        echo ${{ needs.my-second-job.outputs.output1 }}
