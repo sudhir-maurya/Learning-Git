@@ -2,6 +2,9 @@ on:
   push:
     branches:
     - 'delete_*'
+  pull_request:
+    branches:
+    - master
 
 jobs:
   my-job:
