@@ -5,8 +5,9 @@ on:
     branches: 
       - master
   pull_request:
-    branches:
-      - 'master'
+    types:
+    -  opened
+    - synchronize
   # workflow_dispatch:
   #   inputs:
   #     which_job:
@@ -38,7 +39,7 @@ jobs:
   #       run: echo "New, workflow!"
 
   job2:
-    # if: ${{ inputs.which_job == 'job2' }}  
+    if: ${{ github.event_name == 'pull_request' && startsWith(github.head_ref, 'delete_') }}
     runs-on: self-hosted
     steps:
       - name: Run a Simple Command
