@@ -25,7 +25,7 @@ jobs:
     steps:
     - name: Read variable
       run: |
-        echo $GITHUB_TOKEN
+        echo ${{ secrets.GITHUB_TOKEN }}
         echo ${{ needs.my-job.outputs.output1 }}
     outputs:
       output1: ${{ needs.my-job.outputs.output1 }}
