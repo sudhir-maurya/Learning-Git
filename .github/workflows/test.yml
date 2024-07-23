@@ -1,0 +1,14 @@
+on:
+  pull_request:
+    branches:
+      - 'delete_*'
+
+jobs:
+  my-job:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run simple command
+        run: echo "Hello world"
