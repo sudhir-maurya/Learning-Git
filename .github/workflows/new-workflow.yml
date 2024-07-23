@@ -142,7 +142,8 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Run a Simple Command
-        run: echo "${{ needs.job2.outputs.terragrunt_delete_dirs }}"
+        run: |
+          echo "${{ needs.job2.outputs.terragrunt_delete_dirs }}"
 
 
           
