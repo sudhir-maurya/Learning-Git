@@ -15,3 +15,14 @@ jobs:
 
       - name: Run simple command
         run: echo "Hello world"
+    outputs:
+      output1: "value of output1"
+
+  my-second-job:
+    name: second-job
+    needs: my-job
+    runs-on: self-hosted
+    steps:
+    - name: Read variable
+      run: |
+        echo ${{ needs.my-job.outputs.output1 }}
