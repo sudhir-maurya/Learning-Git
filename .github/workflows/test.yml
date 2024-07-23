@@ -25,14 +25,15 @@ jobs:
     steps:
     - name: Read variable
       run: |
+        echo $GITHUB_TOKEN
         echo ${{ needs.my-job.outputs.output1 }}
     outputs:
       output1: ${{ needs.my-job.outputs.output1 }}
-  my-third-job:
-    name: third-job
-    needs: my-second-job
-    runs-on: self-hosted
-    steps:
-    - name: Read from job1
-      run: |
-        echo ${{ needs.my-second-job.outputs.output1 }}
+  # my-third-job:
+  #   name: third-job
+  #   needs: my-second-job
+  #   runs-on: self-hosted
+  #   steps:
+  #   - name: Read from job1
+  #     run: |
+  #       echo ${{ needs.my-second-job.outputs.output1 }}
