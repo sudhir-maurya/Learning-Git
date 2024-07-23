@@ -131,6 +131,7 @@ jobs:
         env:
           TERRAGRUNT_DIRS: ${{ steps.parse-files.outputs.terragrunt_delete_dirs }}
         run: |
+            echo "::set-output name=terragrunt_delete_dirs::${{ steps.parse-files.outputs.terragrunt_delete_dirs }}"
             echo "Terragrunt destroy plan"
             for dir in ${TERRAGRUNT_DIRS}; do \
               echo "#### Running init on ${dir} ####"; \
