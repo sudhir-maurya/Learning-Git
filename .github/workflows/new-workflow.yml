@@ -138,6 +138,7 @@ jobs:
 
   job3:
     name: job3
+    needs: job2
     runs-on: self-hosted
     steps:
       - name: Run a Simple Command
