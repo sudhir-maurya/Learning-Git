@@ -33,4 +33,4 @@ jobs:
     steps:
     - name: Read from job1
       run: |
-        echo ${{ needs.my-job.outputs.output1 }}
+        echo ${{ needs.my-second-job.outputs.output1 }}
